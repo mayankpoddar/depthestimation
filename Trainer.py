@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 from tensorboardX import SummaryWriter
 
 from Models.EncoderModel import EncoderModelResNet, EncoderModelConvNeXt
-from Models.DecoderModel import DepthDecoderModel, PoseDecoderModel
+from Models.DecoderModel import DepthDecoderModelUNET, DepthDecoderModelUNETPlusPlus, PoseDecoderModel
 from Models.BackprojectDepth import BackprojectDepth
 from Models.Project3D import Project3D
 from Dataset.KITTI import KITTI
@@ -45,7 +45,8 @@ class Trainer:
         self.trainableParameters = []
         self.models = {}
         self.models["encoder"] = eval(self.config["Model"]["Encoder"])()
-        self.models["decoder"] = eval(self.config["Model"]["DepthDecoder"])(self.models["encoder"].numChannels, espcn=self.config["Model"]["ESPCN"])
+        depthDecoder = self.config["Model"]["DepthDecoder"] + self.config["Model"]["Arch"]
+        self.models["decoder"] = eval(depthDecoder)(self.models["encoder"].numChannels, espcn=self.config["Model"]["ESPCN"])
         self.models["pose"] = eval(self.config["Model"]["PoseDecoder"])(self.models["encoder"].numChannels, 2, 1)
         for key, model in self.models.items():
             self.models[key] = self.models[key].to(self.device)

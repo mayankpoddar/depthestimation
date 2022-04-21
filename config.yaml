@@ -1,5 +1,5 @@
 appName:            DepthEstimation
-modelName:          convnext-unet-espcn
+modelName:          convnext-unetplusplus-espcn
 
 Optimizer:
     Type:           AdamW
@@ -13,7 +13,7 @@ Scheduler:
 DataLoader:
     Path:           /scratch/mp6021/Monodepth2/data/KITTI
     SplitsType:     eigen_zhou
-    BatchSize:      32
+    BatchSize:      12
     NumWorkers:     14
 
 Logger:
@@ -24,6 +24,7 @@ Trainer:
     ModelSavePath:  /scratch/mp6021/depthestimation/models
 
 Model:
+    Arch:           UNETPlusPlus
     Encoder:        EncoderModelConvNeXt
     EncoderTrain:   True
     DepthDecoder:   DepthDecoderModel
