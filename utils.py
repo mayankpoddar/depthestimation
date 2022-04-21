@@ -1,4 +1,5 @@
 import os
+import torch
 import numpy as np
 import PIL.Image as pil
 from collections import Counter
@@ -67,3 +68,78 @@ def generateDepthMap(calibrationDirectory, velodyneFilePath, cam=2, velodyneDept
         depth[y_loc, x_loc] = velodynePointsImg[points, 2].min()
     depth[depth < 0] = 0
     return depth
+
+def secondsToHM(durationSecs):
+    t = int(durationSecs)
+    s = t % 60
+    t //= 60
+    m = t % 60
+    t //= 60
+    return "{:02d}h{:02d}m{:02d}s".format(t, m, s)
+
+def rotationFromAxisAngle(axisangle):
+    angle = torch.norm(axisangle, 2, 2, True)
+    axis = axisangle / (angle + 1e-7)
+    cosAngle = torch.cos(angle)
+    sinAngle = torch.sin(angle)
+    complementCos = 1 - cosAngle
+    x = axis[..., 0].unsqueeze(1)
+    y = axis[..., 1].unsqueeze(1)
+    z = axis[..., 2].unsqueeze(1)
+    xs = x * sinAngle
+    ys = y * sinAngle
+    zs = z * sinAngle
+    xcomplementCos = x * complementCos
+    ycomplementCos = y * complementCos
+    zcomplementCos = z * complementCos
+    xycomplementCos = x * ycomplementCos
+    yzcomplementCos = y * zcomplementCos
+    zxcomplementCos = z * xcomplementCos
+    rot = torch.zeros((axisangle.shape[0], 4, 4)).to(device=axisangle.device)
+    rot[:, 0, 0] = torch.squeeze(x * xcomplementCos + cosAngle)
+    rot[:, 0, 1] = torch.squeeze(xycomplementCos - zs)
+    rot[:, 0, 2] = torch.squeeze(zxcomplementCos + ys)
+    rot[:, 1, 0] = torch.squeeze(xycomplementCos + zs)
+    rot[:, 1, 1] = torch.squeeze(y * ycomplementCos + cosAngle)
+    rot[:, 1, 2] = torch.squeeze(yzcomplementCos - xs)
+    rot[:, 2, 0] = torch.squeeze(zxcomplementCos - ys)
+    rot[:, 2, 1] = torch.squeeze(yzcomplementCos + xs)
+    rot[:, 2, 2] = torch.squeeze(z * zcomplementCos + cosAngle)
+    rot[:, 3, 3] = 1
+    return rot
+
+def getTranslationMatrix(translation):
+    T = torch.zeros(translation.shape[0], 4, 4).to(device=translation.device)
+    t = translation.contiguous().view(-1, 3, 1)
+    T[:, 0, 0] = 1
+    T[:, 1, 1] = 1
+    T[:, 2, 2] = 1
+    T[:, 3, 3] = 1
+    T[:, :3, 3, None] = t
+    return T
+
+def transformParameters(axisangle, translation, invert=False):
+    rotation = rotationFromAxisAngle(axisangle)
+    trans = translation.clone()
+    if invert:
+        rotation = rotation.transpose(1, 2)
+        trans *= -1
+    T = getTranslationMatrix(trans)
+    if invert:
+        M = torch.matmul(rotation, T)
+    else:
+        M = torch.matmul(T, rotation)
+    return M
+
+def dispToDepth(disp, minDepth, maxDepth):
+    minDisp = 1 / maxDepth
+    maxDisp = 1 / minDepth
+    scaledDisp = minDisp + (maxDisp - minDisp)*disp
+    depth = 1 / scaledDisp
+    return scaledDisp, depth
+
+def normalizeImage(image):
+    maxValue = float(image.max().cpu().data)
+    minValue = float(image.min().cpu().data)
+    diff = (maxValue - minValue) if maxValue != minValue else 1e5
+    return (image - minValue)/diff
