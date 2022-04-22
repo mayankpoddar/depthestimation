@@ -125,7 +125,7 @@ class DecoderBlock(nn.Module):
         if espcn:
             self.upsample = ESPCN(2, in_channels, in_channels, activation=False)
         else:
-            self.upsample = F.interpolate(x, scale_factor=2, mode="bicubic")
+            self.upsample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
 
     def forward(self, x, skip=None):
         x = self.upsample(x)
@@ -167,7 +167,7 @@ class DepthDecoderModelUNET(nn.Module):
             if self.espcn:
                 x = [self.convs[("espcn", layer)](x)]
             else:
-                x = [nn.functional.interpolate(x, scale_factor=sf, mode="nearest")]
+                x = [nn.functional.interpolate(x, scale_factor=2, mode="nearest")]
             if layer > 0:
                 x += [inputFeatures[layer-1]]
             x = torch.cat(x, dim=1)
@@ -255,11 +255,12 @@ class DepthDecoderModelUNETPlusPlus(nn.Module):
                     skip_ch = self.skip_channels[layer_idx] * (layer_idx + 1 - depth_idx)
                     in_ch = self.skip_channels[layer_idx - 1]
                 blocks[f"x_{depth_idx}_{layer_idx}"] = DecoderBlock(in_ch, skip_ch, out_ch, **kwargs)
-        blocks[f"x_{0}_{len(self.in_channels)-1}"] = DecoderBlock(
-            self.in_channels[-1], 0, self.out_channels[-1], **kwargs
-        )
+        #blocks[f"x_{0}_{len(self.in_channels)-1}"] = DecoderBlock(
+        #    self.in_channels[-1], 0, self.out_channels[-1], **kwargs
+        #)
         for scale in range(4):
-            blocks[f"dispconv_{scale}"] = ConvBlock(self.out_channels[4-scale], 1, activation=False)
+#            blocks[f"dispconv_{scale}"] = ConvBlock(self.out_channels[4-scale], 1, activation=False)
+            blocks[f"dispconv_{scale}"] = DecoderBlock(self.out_channels[4-scale-1], 0, 1, use_batchnorm=True, attention_type=None, espcn=False)
         self.blocks = nn.ModuleDict(blocks)
         self.depth = len(self.in_channels) - 1
 
@@ -281,8 +282,8 @@ class DepthDecoderModelUNETPlusPlus(nn.Module):
                     dense_x[f"x_{depth_idx}_{dense_l_i}"] = self.blocks[f"x_{depth_idx}_{dense_l_i}"](
                         dense_x[f"x_{depth_idx}_{dense_l_i-1}"], cat_features
                     )
-        dense_x[f"x_{0}_{self.depth}"] = self.blocks[f"x_{0}_{self.depth}"](dense_x[f"x_{0}_{self.depth-1}"])
+        #dense_x[f"x_{0}_{self.depth}"] = self.blocks[f"x_{0}_{self.depth}"](dense_x[f"x_{0}_{self.depth-1}"])
         outputs = {}
         for i in range(4):
-            outputs[("disp", i)] = self.blocks[f"dispconv_{i}"](dense_x[f"x_0_{4-i}"])
+            outputs[("disp", i)] = self.blocks[f"dispconv_{i}"](dense_x[f"x_0_{3-i}"])
         return outputs
