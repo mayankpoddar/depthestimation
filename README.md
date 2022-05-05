@@ -1,4 +1,4 @@
-# Depth Estimation using self supervised learning (Monocular images)
+# Depth Estimation using Self Supervised learning (Monocular images)
 
 
 * [Environment Setup and Model Training](#env)
@@ -36,6 +36,11 @@ nohup python main.py --conf configs/config.yaml > output.log &
 | ResNet50      | UNet++       | bilinear        | 0.8801 | 0.9673 | 0.9896 | 0.1356  | 0.1852  | 4.348 | 0.9008 |
 | ConvNext-tiny | UNet         | bilinear        | 0.9285 | 0.9701 | 0.9832 | 0.0996  | 0.1809  | 3.975 | 0.7534 |
 | ConvNext-tiny | UNet         | ESPCN           | 0.8909 | 0.97   | 0.989  | 0.1017  | 0.185   | 3.886 | 0.587  |
+
+
+Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
+:-------------------------:|:-------------------------:
+![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/fig6.png)  |  ![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/WSP-2UP4_pred_convnext-unet_espcn-False.jpeg)
 
 
 <a name="ref"></a>
