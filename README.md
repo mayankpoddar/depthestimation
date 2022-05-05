@@ -1,5 +1,11 @@
 # Depth Estimation using Self Supervised learning (Monocular images)
 
+Keeping Monodepth2[1] as our baseline model, we propose certain architectural changes that
+improve the performance of Monodepth V2 by incorporating recent developments for convolutional
+neural networks and using a common encoder backbone. In the next phase, we plan to incorporate
+NYUv2 dataset and experiment with various augmentation techniques to further improve the
+performance on the optimal backbone and architecture selected. All the experiments are performed
+on the KITTI dataset [5] and the NYUv2 dataset [6].
 
 * [Environment Setup and Model Training](#env)
 * [Experimentation Results](#results)
@@ -53,3 +59,7 @@ from a single image.
 U-Net Architecture for Medical Image Segmentation”. arXiv:1807.10165
 <li>[4] Zhuang Liu, Hanzi Mao, Chao-Yuan Wu, Christoph Feichtenhofer, Trevor Darrell, Saining Xie, “A Con-
 vNet for the 2020s”. arXiv:2201.03545.
+<li>[5] A. Geiger, P. Lenz, C. Stiller, R. Urtasun, ‘Vision meets Robotics: The KITTI Dataset’, International
+Journal of Robotics Research (IJRR), 2013.
+<li>[6] P. K. Nathan Silberman, Derek Hoiem, R. Fergus, ‘Indoor Segmentation and Support Inference from
+RGBD Images’, ECCV, 2012.
