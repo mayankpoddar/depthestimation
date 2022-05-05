@@ -40,7 +40,7 @@ nohup python main.py --conf configs/config.yaml > output.log &
 
 Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
 :-------------------------:|:-------------------------:
-![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/fig6.png)  |  ![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/WSP-2UP4_pred_convnext-unet_espcn-False.jpeg)
+![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/fig6.png)  |  ![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/WSP-2UP4_pred_convnext-unet_espcn-False.jpg)
 
 
 <a name="ref"></a>
