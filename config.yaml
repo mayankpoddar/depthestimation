@@ -1,5 +1,5 @@
 appName:            DepthEstimation
-modelName:          convnext-unetplusplus-espcn
+modelName:          resnet-unet-camnet
 
 Optimizer:
     Type:           AdamW
@@ -13,7 +13,7 @@ Scheduler:
 DataLoader:
     Path:           /scratch/mp6021/Monodepth2/data/KITTI
     SplitsType:     eigen_zhou
-    BatchSize:      12
+    BatchSize:      24
     NumWorkers:     14
 
 Logger:
@@ -24,10 +24,16 @@ Trainer:
     ModelSavePath:  /scratch/mp6021/depthestimation/models
 
 Model:
-    Arch:           UNETPlusPlus
-    Encoder:        EncoderModelConvNeXt
+    Arch:           UNET
+    Encoder:        EncoderModelResNet
     EncoderTrain:   True
     DepthDecoder:   DepthDecoderModel
-    ESPCN:          True
+    ESPCN:          False
     PoseEncoder:    Shared
-    PoseDecoder:    PoseDecoderModel
+    PoseDecoder:    CameraNet
+    Automasking:    True
+    K_Trainable:    True
+    Additional:     False 
+    
+CameraNet:
+    InputType:      EncoderLast
