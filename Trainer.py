@@ -21,8 +21,8 @@ from utils import secondsToHM, transformParameters, dispToDepth, normalizeImage
 from config import Config
 
 class Trainer:
-    def __init__(self):
-        self.configure()
+    def __init__(self,config_path):
+        self.configure(config_path)
         self.createModels()
         self.setupProjections()
         self.setupLosses()
@@ -30,8 +30,8 @@ class Trainer:
         self.loadDataset()
         self.setupLogging()
         
-    def configure(self):
-        self.config = Config()()
+    def configure(self, config_path):
+        self.config = Config(config_path)()
         self.modelName = self.config["modelName"]
         print("Starting up Model : {}".format(self.modelName))
         self.height = 192

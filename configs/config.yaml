@@ -1,0 +1,33 @@
+appName:            DepthEstimation
+modelName:          convnext-unetplusplus-espcn
+
+Optimizer:
+    Type:           AdamW
+    LR:             1e-4
+    WeightDecay:    0.05
+
+Scheduler:
+    Type:           CosineAnnealingLR
+    NumEpochs:      20
+
+DataLoader:
+    Path:           /scratch/mp6021/Monodepth2/data/KITTI
+    SplitsType:     eigen_zhou
+    BatchSize:      12
+    NumWorkers:     14
+
+Logger:
+    Path:           /scratch/mp6021/depthestimation/logs
+
+Trainer:
+    Epochs:         20
+    ModelSavePath:  /scratch/mp6021/depthestimation/models
+
+Model:
+    Arch:           UNETPlusPlus
+    Encoder:        EncoderModelConvNeXt
+    EncoderTrain:   True
+    DepthDecoder:   DepthDecoderModel
+    ESPCN:          True
+    PoseEncoder:    Shared
+    PoseDecoder:    PoseDecoderModel
