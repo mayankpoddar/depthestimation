@@ -11,6 +11,7 @@ from tensorboardX import SummaryWriter
 
 from Models.EncoderModel import EncoderModelResNet, EncoderModelConvNeXt
 from Models.DecoderModel import DepthDecoderModelUNET, DepthDecoderModelUNETPlusPlus, PoseDecoderModel
+from Models.CameraNet import CameraNet, CameraIntrinsics
 from Models.BackprojectDepth import BackprojectDepth
 from Models.Project3D import Project3D
 from Dataset.KITTI import KITTI
@@ -47,7 +48,20 @@ class Trainer:
         self.models["encoder"] = eval(self.config["Model"]["Encoder"])()
         depthDecoder = self.config["Model"]["DepthDecoder"] + self.config["Model"]["Arch"]
         self.models["decoder"] = eval(depthDecoder)(self.models["encoder"].numChannels, espcn=self.config["Model"]["ESPCN"])
-        self.models["pose"] = eval(self.config["Model"]["PoseDecoder"])(self.models["encoder"].numChannels, 2, 1)
+        if self.config["Model"]["PoseDecoder"] == "CameraNet":
+            if self.config["CameraNet"]["InputType"] == "EncoderLast":
+                self.models["pose"] = CameraNet(self.models["encoder"].numChannels[-1], h=self.height//(2**(self.numScales-1)), w=self.width//(2**(self.numScales-1)))
+            elif self.config["CameraNet"]["InputType"] == "Images":
+                self.models["pose"] = CameraNet(3, h=self.height, w=self.width)
+        else:
+            self.models["pose"] = eval(self.config["Model"]["PoseDecoder"])(self.models["encoder"].numChannels, 2, 1)
+        additional = self.config["Model"]["Additional"]
+        if additional:
+            params = ""
+            for key, value in self.config[additional].items():
+                params += str(key) + "=" + str(value) + ","
+            params = params[:-1]
+            self.models[additional] = eval(additional + "(" + params + ")")
         for key, model in self.models.items():
             self.models[key] = self.models[key].to(self.device)
             self.trainableParameters += list(model.parameters())
@@ -56,7 +70,7 @@ class Trainer:
         
     def setupLosses(self):
         self.losses = {}
-        self.losses["Loss"] = Loss(self.numScales, self.frameIdxs, self.device)
+        self.losses["Loss"] = Loss(self.numScales, self.frameIdxs, self.device, self.config["Model"]["Automasking"])
         self.losses["Depth"] = DepthLoss()
         for key, model in self.losses.items():
             self.losses[key] = self.losses[key].to(self.device)
@@ -100,10 +114,11 @@ class Trainer:
         valFilenames = self.readlines(filepath.format("val"))
         numTrain = len(trainFilenames)
         self.numSteps = (numTrain//int(self.config["DataLoader"]["BatchSize"]))*int(self.config["Trainer"]["Epochs"])
+        weather_aug = self.config["DataLoader"].get("WeatherAug", False)
         trainDataset = self.dataset(dataPath, trainFilenames, self.height, self.width,
-                                    self.frameIdxs, 4, True)
+                                    self.frameIdxs, 4, train=True, weather_aug=weather_aug)
         valDataset = self.dataset(dataPath, valFilenames, self.height, self.width, self.frameIdxs,
-                                  4, False)
+                                  4, train=False, weather_aug=False)
         self.trainLoader = DataLoader(trainDataset, int(self.config["DataLoader"]["BatchSize"]), shuffle=True, num_workers=14, pin_memory=True, drop_last=True)
         self.valLoader = DataLoader(valDataset, int(self.config["DataLoader"]["BatchSize"]), shuffle=True, num_workers=14, pin_memory=True, drop_last=True)
         self.valIterator = iter(self.valLoader)
@@ -125,7 +140,10 @@ class Trainer:
             writer.add_image("color_{}".format(frameIdx), inputs[("color", frameIdx, 0)][0].data, self.step)
             if frameIdx != 0:
                 writer.add_image("color_pred_{}".format(frameIdx), outputs[("color", frameIdx, 0)][0].data, self.step)
-            writer.add_image("disp", normalizeImage(outputs[("disp", 0)][0]), self.step)
+        writer.add_image("disp", normalizeImage(outputs[("disp", 0)][0]), self.step)
+        if self.config["Model"]["Automasking"]:
+            writer.add_image("automask", outputs[("identity_selection/0")][0][None, ...], self.step)
+            
     
     def logTime(self, batchIdx, duration, loss):
         samplesPerSec = int(self.config["DataLoader"]["BatchSize"]) / duration
@@ -158,10 +176,32 @@ class Trainer:
                 poseInputs = [poseFeatures[fi], poseFeatures[0]]
             else:
                 poseInputs = [poseFeatures[0], poseFeatures[fi]]
-            axisangle, translation = self.models["pose"](poseInputs)
+            if self.config["Model"]["PoseDecoder"] == "CameraNet":
+                if self.config["CameraNet"]["InputType"] == "EncoderLast":
+                    poseInputs = torch.cat([f[-1] for f in poseInputs], dim=1)
+                    axisangle, translation, _, intrinsics = self.models["pose"](poseInputs)
+                    intrinsics[:, 0] *= 2**(self.numScales - 1)
+                    intrinsics[:, 1] *= 2**(self.numScales - 1)
+                elif self.config["CameraNet"]["InputType"] == "Images":
+                    poseInputs = [inputs[("color_aug", 0, 0)], inputs[("color_aug", fi, 0)]]
+                    if fi < 0:
+                        poseInputs = poseInputs[::-1]
+                    poseInputs = torch.cat(poseInputs, dim=1)
+                    axisangle, translation, _, intrinsics = self.models["pose"](poseInputs)
+                outputs[("K", fi, 0)] = intrinsics
+                outputs[("inv_K", fi, 0)] = torch.linalg.pinv(intrinsics)
+            else:
+                axisangle, translation, bottleneck = self.models["pose"](poseInputs)
+                if self.config["Model"]["Additional"] == "CameraIntrinsics":
+                    intrinsics = self.models["CameraIntrinsics"](bottleneck)
+                    intrinsics[:, 0] *= 2**(self.numScales - 1)
+                    intrinsics[:, 1] *= 2**(self.numScales - 1)
+                    outputs[("K", fi, 0)] = intrinsics
+                    outputs[("inv_K", fi, 0)] = torch.linalg.pinv(intrinsics)
             outputs[("axisangle", 0, fi)] = axisangle
             outputs[("translation", 0, fi)] = translation
             outputs[("cam_T_cam", 0, fi)] = transformParameters(axisangle[:, 0], translation[:, 0], invert=(fi<0))
+            
         return outputs
 
     def generateImagePredictions(self, inputs, outputs):
@@ -174,13 +214,18 @@ class Trainer:
             outputs[("depth", 0, scale)] = depth
             for i, frameIdx in enumerate(self.frameIdxs[1:]):
                 T = outputs[("cam_T_cam", 0, frameIdx)]
-                cameraPoints = self.backprojectDepth[sourceScale](depth, inputs[("inv_K", sourceScale)])
-                pixelCoordinates = self.project3d[sourceScale](cameraPoints, inputs[("K", sourceScale)], T)
+                if self.config["Model"]["K_Trainable"] == True:
+                    cameraPoints = self.backprojectDepth[sourceScale](depth, outputs[("inv_K", frameIdx, sourceScale)])
+                    pixelCoordinates = self.project3d[sourceScale](cameraPoints, outputs[("K", frameIdx, sourceScale)], T)
+                else:
+                    cameraPoints = self.backprojectDepth[sourceScale](depth, inputs[("inv_K", sourceScale)])
+                    pixelCoordinates = self.project3d[sourceScale](cameraPoints, inputs[("K", sourceScale)], T)
                 outputs[("sample", frameIdx, scale)] = pixelCoordinates
                 outputs[("color", frameIdx, scale)] = F.grid_sample(inputs[("color", frameIdx, sourceScale)],
                                                                     outputs[(("sample", frameIdx, scale))],
                                                                     padding_mode="border", align_corners=False)
-                outputs[("color_identity", frameIdx, scale)] = inputs[("color", frameIdx, sourceScale)]
+                if self.config["Model"]["Automasking"]:
+                    outputs[("color_identity", frameIdx, scale)] = inputs[("color", frameIdx, sourceScale)]
 
     def processBatch(self, inputs):
         for key, value in inputs.items():
@@ -239,3 +284,6 @@ class Trainer:
             self.log("val", inputs, outputs, losses)
             del inputs, outputs, losses
         self.setTrain()
+
+if __name__ == "__main__":
+    Trainer().train()

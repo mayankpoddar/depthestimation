@@ -5,7 +5,7 @@ import torchvision.models as models
 import torch.utils.model_zoo as model_zoo
 
 class EncoderModelResNet(nn.Module):
-    def __init__(self, numLayers, input_images=1):
+    def __init__(self, numLayers=50, input_images=1):
         super(EncoderModelResNet, self).__init__()
         self.numChannels = np.array([64, 64, 128, 256, 512])
         self.input_images = input_images

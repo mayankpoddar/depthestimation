@@ -201,10 +201,11 @@ class PoseDecoderModel(nn.Module):
             if i != 2:
                 out = self.relu(out)
         out = out.mean(3).mean(2)
+        bottleneck = out.unsqueeze(-1).unsqueeze(-1)
         out = 0.01 * out.view(-1, self.numFramesPredict, 1, 6)
         axisangle = out[..., :3]
         translation = out[..., 3:]
-        return axisangle, translation
+        return axisangle, translation, bottleneck
 
 class DepthDecoderModelUNETPlusPlus(nn.Module):
     def __init__(
