@@ -33,6 +33,11 @@ To run in background on hpc
 ```
 nohup python main.py --conf configs/config.yaml > output.log &
 ```
+Use tb flag to enable tensorboard
+```
+python main.py --conf configs/config.yaml -tb 
+```
+use tbpath ```-tbpth ./logs``` for custom log path
 
 <a name="results"></a>
 # Experimentation Results

@@ -12,7 +12,9 @@ dependencies:
   - cudatoolkit=11.3
   - pip:
     - python-dotenv
+    - tensorboard
     - tensorboardx
     - scikit-image
     - PyYaml
+    - albumentations
 

@@ -17,11 +17,11 @@ DataLoader:
     NumWorkers:     14
 
 Logger:
-    Path:           /scratch/mp6021/depthestimation/logs
+    Path:           ./logs
 
 Trainer:
     Epochs:         20
-    ModelSavePath:  /scratch/mp6021/depthestimation/models
+    ModelSavePath:  ./trained_models
 
 Model:
     Arch:           UNET
