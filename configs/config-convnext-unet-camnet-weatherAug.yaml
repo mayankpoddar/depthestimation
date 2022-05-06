@@ -1,5 +1,5 @@
 appName:            DepthEstimation
-modelName:          resnet-unet-camnet
+modelName:          convnext-unet-camnet-weatherAug
 
 Optimizer:
     Type:           AdamW
@@ -15,6 +15,7 @@ DataLoader:
     SplitsType:     eigen_zhou
     BatchSize:      24
     NumWorkers:     14
+    WeatherAug:     True
 
 Logger:
     Path:           /scratch/mp6021/depthestimation/logs
@@ -25,7 +26,7 @@ Trainer:
 
 Model:
     Arch:           UNET
-    Encoder:        EncoderModelResNet
+    Encoder:        EncoderModelConvNeXt
     EncoderTrain:   True
     DepthDecoder:   DepthDecoderModel
     ESPCN:          False
@@ -33,7 +34,7 @@ Model:
     PoseDecoder:    CameraNet
     Automasking:    True
     K_Trainable:    True
-    Additional:     False 
+    Additional:     False
     
 CameraNet:
     InputType:      EncoderLast

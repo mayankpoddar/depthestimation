@@ -1,5 +1,5 @@
 appName:            DepthEstimation
-modelName:          resnet-unet-camnet
+modelName:          convnext-unet-camnet
 
 Optimizer:
     Type:           AdamW
@@ -25,7 +25,7 @@ Trainer:
 
 Model:
     Arch:           UNET
-    Encoder:        EncoderModelResNet
+    Encoder:        EncoderModelConvNeXt
     EncoderTrain:   True
     DepthDecoder:   DepthDecoderModel
     ESPCN:          False
@@ -33,7 +33,7 @@ Model:
     PoseDecoder:    CameraNet
     Automasking:    True
     K_Trainable:    True
-    Additional:     False 
+    Additional:     False
     
 CameraNet:
     InputType:      EncoderLast

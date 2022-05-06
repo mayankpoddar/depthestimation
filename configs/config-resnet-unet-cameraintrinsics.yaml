@@ -1,5 +1,5 @@
 appName:            DepthEstimation
-modelName:          resnet-unet-camnet
+modelName:          resnet-unet-cameraintrinsics
 
 Optimizer:
     Type:           AdamW
@@ -30,10 +30,12 @@ Model:
     DepthDecoder:   DepthDecoderModel
     ESPCN:          False
     PoseEncoder:    Shared
-    PoseDecoder:    CameraNet
+    PoseDecoder:    PoseDecoderModel
     Automasking:    True
     K_Trainable:    True
-    Additional:     False 
+    Additional:     CameraIntrinsics
     
-CameraNet:
-    InputType:      EncoderLast
+CameraIntrinsics:
+    bottleneck_channels:    6
+    h:                      self.height//8
+    w:                      self.width//8

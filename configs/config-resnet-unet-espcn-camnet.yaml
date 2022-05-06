@@ -1,5 +1,5 @@
 appName:            DepthEstimation
-modelName:          resnet-unet-camnet
+modelName:          resnet-unet-espcn-camnet
 
 Optimizer:
     Type:           AdamW
@@ -28,7 +28,7 @@ Model:
     Encoder:        EncoderModelResNet
     EncoderTrain:   True
     DepthDecoder:   DepthDecoderModel
-    ESPCN:          False
+    ESPCN:          True
     PoseEncoder:    Shared
     PoseDecoder:    CameraNet
     Automasking:    True
