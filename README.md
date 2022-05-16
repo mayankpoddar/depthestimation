@@ -54,6 +54,11 @@ Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
 ![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/fig6.png)  |  ![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/WSP-2UP4_pred_convnext-unet_espcn-False.jpg)
 
 
+|Sample Video | Monodepth2 Output |
+|-------------|-------------------|
+|![testVideo](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo.gif)|![baseline](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo-baseline-resnet-unet.gif)|
+
+
 <a name="ref"></a>
 # References
 <li>[1] Godard, Cl ́ement, et al., ”Digging into self-supervised monocular depth estimation.” Proceedings of the
