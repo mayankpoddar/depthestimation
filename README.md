@@ -11,7 +11,7 @@
   <p align="center">
     an extension of "Digging into self-supervised monocular depth estimation"
     <br />
-    <a href="[https://www.tensorflow.org/tensorboard](https://pytorch.org/)"><strong> Pytorch »</strong></a> | <a href="https://www.tensorflow.org/tensorboard"><strong> Tensorboard »</strong></a>
+    <a href="https://www.tensorflow.org/tensorboard](https://pytorch.org/"><strong> Pytorch »</strong></a> | <a href="https://www.tensorflow.org/tensorboard"><strong> Tensorboard »</strong></a>
     <br />
   </p>
 </div>
