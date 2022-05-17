@@ -32,12 +32,9 @@ on the KITTI dataset [5] and the NYUv2 dataset [6].
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-<!-- GETTING STARTED -->
-## Getting Started
-
 <a name="env"></a>
 
-### Environment Setup
+# Environment Setup
 
 1. Install Conda:
 
@@ -46,7 +43,13 @@ conda env create -f depthestimate_env.yaml
 conda activate depthestimate_env
 ```
 
-### Train Model
+2. Install project dependcies:
+
+```
+pip install -r requirements.txt
+```
+
+# Train Model
 
 ```
 python main.py --conf configs/config.yaml 
@@ -62,26 +65,21 @@ Use tb flag to enable tensorboard
 python main.py --conf configs/config.yaml -tb 
 ```
 use tbpath `-tbpth ./logs` for custom log path
-
-### Configure Tensorboard
-
-The tensorboard can be configured to show the required results for different experiments performed. Toggle the panel on the side as illustrated.
-<img src="https://github.com/mayankpoddar/depthestimation/blob/main/assets/legend.png" alt="tensorboard" width="250" height="250">
-
-3. Collect experiment results
+  
+# Collect experiment results
 
 | Impl | Encoder | Arch | Upsampling | K | a1 | a2 | a3 | abs_rel | log_rms | rms | sq_rel | Trained Weights |
 |---------------|--------------|-----------------|--------|--------|--------|---------|---------|-------|--------|--------|--------| -------- |
 | Paper[2] | resnet50 | UNet | bilinear | &#x2717; | 0.8777 | 0.959 | 0.981 | 0.115  | 0.193 | 4.863 | 0.903 | - |
 | CamLess[5] | resneXt50 | UNet | ESPCN | &#10003; | 0.891 | 0.964 | 0.983 | 0.106  | 0.182  | 4.482 | 0.750 | - |
-| Ours | resnet50 | UNet | ESPCN | &#x2717; | 0.8784 | 0.9654 | 0.9867 | 0.109 | 0.1887 | 4.327 | 0.661 | [Link](https://storage.googleapis.com/depthestimation-weights/baseline-resnet-unet.zip) |
-| Ours | resnet50 | UNet++ | bilinear | &#x2717; | 0.8808 | 0.9607 | 0.9835  | 0.1483 | 0.2372 | 6.000 | 3.709 | [Link](https://storage.googleapis.com/depthestimation-weights/resnet-unetplusplus.zip) |
-| Ours | convnext-tiny | UNet | bilinear | &#x2717; | **0.9145** | 0.9682 | 0.9852  | **0.09386** | 0.1776 | 3.953 | **0.5298** | [Link](https://storage.googleapis.com/depthestimation-weights/convnext-unet.zip) |
-| Ours | convnext-tiny | UNet | ESPCN | &#x2717; | 0.8384 | 0.961 | 0.989  | 0.1224 | 0.1892 | **3.886** | 0.587 | [Link](https://storage.googleapis.com/depthestimation-weights/convnext-unet-espcn.zip) |
-| Ours | convnext-tiny | UNet++ | ESPCN | &#x2717; | 0.8229 | **0.9751** | **0.9902**  | 0.1234 | 0.1933 | 4.07 | 0.6039 | [Link](https://storage.googleapis.com/depthestimation-weights/convnext-unetplusplus-espcn.zip) |
+| Ours | resnet50 | UNet | ESPCN | &#x2717; | 0.8784 | 0.9654 | 0.9867 | 0.109 | 0.1887 | 4.327 | 0.661 | [Download](https://storage.googleapis.com/depthestimation-weights/baseline-resnet-unet.zip) |
+| Ours | resnet50 | UNet++[3] | bilinear | &#x2717; | 0.8808 | 0.9607 | 0.9835  | 0.1483 | 0.2372 | 6.000 | 3.709 | [Download](https://storage.googleapis.com/depthestimation-weights/resnet-unetplusplus.zip) |
+| Ours | convnext-tiny[4] | UNet | bilinear | &#x2717; | **0.9145** | 0.9682 | 0.9852  | **0.09386** | 0.1776 | 3.953 | **0.5298** | [Download](https://storage.googleapis.com/depthestimation-weights/convnext-unet.zip) |
+| Ours | convnext-tiny | UNet | ESPCN | &#x2717; | 0.8384 | 0.961 | 0.989  | 0.1224 | 0.1892 | **3.886** | 0.587 | [Download](https://storage.googleapis.com/depthestimation-weights/convnext-unet-espcn.zip) |
+| Ours | convnext-tiny | UNet++ | ESPCN | &#x2717; | 0.8229 | **0.9751** | **0.9902**  | 0.1234 | 0.1933 | 4.07 | 0.6039 | [Download](https://storage.googleapis.com/depthestimation-weights/convnext-unetplusplus-espcn.zip) |
 | Ours | resnet50 | UNet | bilinear | &#10003; | 0.8752 | 0.9575 | 0.9814  | 0.1125 | 0.1984 | 4.55 | 0.6957 | [Link](https://storage.googleapis.com/depthestimation-weights/resnet-unet-camnet.zip) |
-| Ours | convnext-tiny | UNet | bilinear | &#10003; | 0.7346 | 0.8911 | 0.9491  | 0.1828 | 0.2981 | 7.515 | 1.474 | [Link](https://storage.googleapis.com/depthestimation-weights/convnext-unet-camnet.zip) |
-| Ours | resnet50 | UNet | ESPCN | &#x2717; | 0.9111 | 0.9733 | 0.9878  | 0.1005 | **0.1693** | 3.978 | 0.5615 | [Link](https://storage.googleapis.com/depthestimation-weights/resnet-unet-espcn.zip) |
+| Ours | convnext-tiny | UNet | bilinear | &#10003; | 0.7346 | 0.8911 | 0.9491  | 0.1828 | 0.2981 | 7.515 | 1.474 | [Download](https://storage.googleapis.com/depthestimation-weights/convnext-unet-camnet.zip) |
+| Ours | resnet50 | UNet | ESPCN | &#x2717; | 0.9111 | 0.9733 | 0.9878  | 0.1005 | **0.1693** | 3.978 | 0.5615 | [Download](https://storage.googleapis.com/depthestimation-weights/resnet-unet-espcn.zip) |
 
 Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
 :-------------------------:|:-------------------------:
@@ -94,6 +92,24 @@ Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
 |ConvNeXt-UNet Output | ConvNeXt-UNet++-ESPCN Output |
 |---------------------|----------------------------|
 |![convnext-unet](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo-convnext-unet.gif)|![convnext-unetplusplus-espcn](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo-convnext-unetplusplus-espcn.gif)|
+
+<hr/>
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## References
+
+[1] Godard, Cl ́ement, et al., ”Digging into self-supervised monocular depth estimation.” Proceedings of the IEEE/CVF International Conference on Computer Vision. 2019. arXiv:1806.01260
+
+[2] Source Code of Monodepth2: GitHub - nianticlabs/monodepth2: [ICCV 2019] Monocular depth estimation from a single image.
+
+[3] Zongwei Zhou, Md Mahfuzur Rahman Siddiquee, Nima Tajbakhsh, Jianming Liang, “UNet++: A Nested U-Net Architecture for Medical Image Segmentation”. arXiv:1807.10165.
+
+[4] Zhuang Liu, Hanzi Mao, Chao-Yuan Wu, Christoph Feichtenhofer, Trevor Darrell, Saining Xie, “A Con- vNet for the 2020s”. arXiv:2201.03545.
+
+[5] A. Geiger, P. Lenz, C. Stiller, R. Urtasun, ‘Vision meets Robotics: The KITTI Dataset’, International Journal of Robotics Research (IJRR), 2013.
+
+[6] P. K. Nathan Silberman, Derek Hoiem, R. Fergus, ‘Indoor Segmentation and Support Inference from RGBD Images’, ECCV, 2012.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
