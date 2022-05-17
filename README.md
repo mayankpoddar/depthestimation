@@ -11,7 +11,7 @@
   <p align="center">
     an extension of "Digging into self-supervised monocular depth estimation"
     <br />
-    <a href="https://www.tensorflow.org/tensorboard"><strong>using Tensorboard »</strong></a>
+    <a href="[https://www.tensorflow.org/tensorboard](https://pytorch.org/)"><strong> Pytorch »</strong></a> | <a href="https://www.tensorflow.org/tensorboard"><strong> Tensorboard »</strong></a>
     <br />
   </p>
 </div>
@@ -37,7 +37,7 @@ on the KITTI dataset [5] and the NYUv2 dataset [6].
 
 <a name="env"></a>
 
-## Environment Setup
+### Environment Setup
 
 1. Install Conda:
 
@@ -46,11 +46,8 @@ conda env create -f depthestimate_env.yaml
 conda activate depthestimate_env
 ```
 
-### Usage
+### Train Model
 
-1. Train Model
-
-Training your model
 ```
 python main.py --conf configs/config.yaml 
 ```
@@ -66,16 +63,19 @@ python main.py --conf configs/config.yaml -tb
 ```
 use tbpath `-tbpth ./logs` for custom log path
 
-2. Configure tensorboard to view relevant experiment parameters TODO.
+### Configure Tensorboard
+
+The tensorboard can be configured to show the required results for different experiments performed. Toggle the panel on the side as illustrated.
+<img src="https://github.com/mayankpoddar/depthestimation/blob/main/assets/legend.png" alt="tensorboard" width="250" height="250">
 
 3. Collect experiment results
 
-| Impl | Encoder | Arch | Upsampling | K | a1 | a2 | a3 | abs_rel | log_rms | rms | sq_rel | Link |
+| Impl | Encoder | Arch | Upsampling | K | a1 | a2 | a3 | abs_rel | log_rms | rms | sq_rel | Trained Weights |
 |---------------|--------------|-----------------|--------|--------|--------|---------|---------|-------|--------|--------|--------| -------- |
 | Paper[2] | resnet50 | UNet | bilinear | &#x2717; | 0.8777 | 0.959 | 0.981 | 0.115  | 0.193 | 4.863 | 0.903 | - |
 | CamLess[5] | resneXt50 | UNet | ESPCN | &#10003; | 0.891 | 0.964 | 0.983 | 0.106  | 0.182  | 4.482 | 0.750 | - |
 | Ours | resnet50 | UNet | ESPCN | &#x2717; | 0.8784 | 0.9654 | 0.9867 | 0.109 | 0.1887 | 4.327 | 0.661 | [Link](https://storage.googleapis.com/depthestimation-weights/baseline-resnet-unet.zip) |
-| Ours | resnet50 | UNet++ | bilinear | 0.8808 | 0.9607 | 0.9835  | 0.1483 | 0.2372 | 6.000 | 3.709 | [Link](https://storage.googleapis.com/depthestimation-weights/resnet-unetplusplus.zip) |
+| Ours | resnet50 | UNet++ | bilinear | &#x2717; | 0.8808 | 0.9607 | 0.9835  | 0.1483 | 0.2372 | 6.000 | 3.709 | [Link](https://storage.googleapis.com/depthestimation-weights/resnet-unetplusplus.zip) |
 | Ours | convnext-tiny | UNet | bilinear | &#x2717; | **0.9145** | 0.9682 | 0.9852  | **0.09386** | 0.1776 | 3.953 | **0.5298** | [Link](https://storage.googleapis.com/depthestimation-weights/convnext-unet.zip) |
 | Ours | convnext-tiny | UNet | ESPCN | &#x2717; | 0.8384 | 0.961 | 0.989  | 0.1224 | 0.1892 | **3.886** | 0.587 | [Link](https://storage.googleapis.com/depthestimation-weights/convnext-unet-espcn.zip) |
 | Ours | convnext-tiny | UNet++ | ESPCN | &#x2717; | 0.8229 | **0.9751** | **0.9902**  | 0.1234 | 0.1933 | 4.07 | 0.6039 | [Link](https://storage.googleapis.com/depthestimation-weights/convnext-unetplusplus-espcn.zip) |
@@ -97,9 +97,8 @@ Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-<!-- CONTACT -->
 ## Contributors
 
-* Mayank Poddar
-* Akash Mishra
-* Shikhar Vaish
+* [Mayank Poddar](https://github.com/mayankpoddar)
+* [Akash Mishra](https://github.com/akashsky1994)
+* [Shikhar Vaish](https://github.com/svr8)
