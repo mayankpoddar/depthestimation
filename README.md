@@ -54,9 +54,13 @@ Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
 ![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/fig6.png)  |  ![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/WSP-2UP4_pred_convnext-unet_espcn-False.jpg)
 
 
-|Sample Video | Monodepth2 Output | Convnext UNET Output |
-|-------------|-------------------|----------------------|
-|![testVideo](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo.gif)|![baseline](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo-baseline-resnet-unet.gif)|![convnext-unet](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo-convnext-unet.gif)|
+|Sample Video | Monodepth2 Output |
+|-------------|-------------------|
+|![testVideo](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo.gif)|![baseline](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo-baseline-resnet-unet.gif)|
+
+|ConvNeXt-UNet Output | ConvNeXt-UNet++-ESPCN Output |
+|---------------------|----------------------------|
+|![convnext-unet](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo-convnext-unet.gif)|![convnext-unetplusplus-espcn](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo-convnext-unetplusplus-espcn.gif)|
 
 
 <a name="ref"></a>
