@@ -66,6 +66,7 @@ python main.py --conf configs/config.yaml -tb
 ```
 use tbpath `-tbpth ./logs` for custom log path
   
+<a name="results"></a>
 # Collect experiment results
 
 | Impl | Encoder | Arch | Upsampling | K | a1 | a2 | a3 | abs_rel | log_rms | rms | sq_rel | Trained Weights |
@@ -97,6 +98,7 @@ Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+<a name="ref"></a>
 ## References
 
 [1] Godard, Cl ́ement, et al., ”Digging into self-supervised monocular depth estimation.” Proceedings of the IEEE/CVF International Conference on Computer Vision. 2019. arXiv:1806.01260
