@@ -67,7 +67,9 @@ python main.py --conf configs/config.yaml -tb
 use tbpath `-tbpth ./logs` for custom log path
   
 <a name="results"></a>
-# Collect experiment results
+# Experiment
+
+## Data Reported
 
 | Impl | Encoder | Arch | Upsampling | K | a1 | a2 | a3 | abs_rel | log_rms | rms | sq_rel | Trained Weights |
 |---------------|--------------|-----------------|--------|--------|--------|---------|---------|-------|--------|--------|--------| -------- |
@@ -93,6 +95,24 @@ Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
 |ConvNeXt-UNet Output | ConvNeXt-UNet++-ESPCN Output |
 |---------------------|----------------------------|
 |![convnext-unet](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo-convnext-unet.gif)|![convnext-unetplusplus-espcn](https://github.com/mayankpoddar/depthestimation/blob/main/predictions/testVideo-convnext-unetplusplus-espcn.gif)|
+
+## Reproduce Results
+
+### Running on Datasets
+
+Unzip your weights to /path/to/unzipped/weights. 
+The results shown above can be reproduced by running:
+
+```
+python eval.py /path/to/config.yaml /path/to/unzipped/weights/
+```
+
+to evaluate any model on KITTI dataset.
+
+### Running on Custom Image and Videos
+
+* `/test-image.ipynb`: This notebook can be used for running experiment on custom images.
+* `/test-video.ipynb`: This notebook can be used for running experiment on custom images.
 
 <hr/>
 
