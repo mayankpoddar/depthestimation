@@ -17,7 +17,7 @@
 </div>
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+# Overview
 
 Keeping Monodepth2[1] as our baseline model, we propose certain architectural changes that
 improve the performance of Monodepth V2 by incorporating recent developments for convolutional
@@ -43,7 +43,7 @@ conda env create -f depthestimate_env.yaml
 conda activate depthestimate_env
 ```
 
-2. Install project dependcies:
+2. Install project dependencies:
 
 ```
 pip install -r requirements.txt
@@ -114,6 +114,14 @@ Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
 [6] P. K. Nathan Silberman, Derek Hoiem, R. Fergus, ‘Indoor Segmentation and Support Inference from RGBD Images’, ECCV, 2012.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+## Acknowledgements
+
+Prof. Siddharth Garg and Prof. Arsalan Mosenia supervised this study as part of the ECE-GY 7123:
+Intro To Deep Learning Course at New York University. We appreciate NYU providing the team
+with High Performance Computing facilities.
+8
+
 
 ## Contributors
 
