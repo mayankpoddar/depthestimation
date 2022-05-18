@@ -1,0 +1,7 @@
+Pillow
+numpy
+torch
+torchvision
+albumentations
+scikit-image
+tensorboard
