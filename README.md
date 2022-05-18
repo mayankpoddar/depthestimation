@@ -140,7 +140,6 @@ to evaluate any model on KITTI dataset.
 Prof. Siddharth Garg and Prof. Arsalan Mosenia supervised this study as part of the ECE-GY 7123:
 Intro To Deep Learning Course at New York University. We appreciate NYU providing the team
 with High Performance Computing facilities.
-8
 
 
 ## Contributors
