@@ -84,9 +84,13 @@ use tbpath `-tbpth ./logs` for custom log path
 | Ours | convnext-tiny | UNet | bilinear | &#10003; | 0.7346 | 0.8911 | 0.9491  | 0.1828 | 0.2981 | 7.515 | 1.474 | [Download](https://storage.googleapis.com/depthestimation-weights/convnext-unet-camnet.zip) |
 | Ours | resnet50 | UNet | ESPCN | &#x2717; | 0.9111 | 0.9733 | 0.9878  | 0.1005 | **0.1693** | 3.978 | 0.5615 | [Download](https://storage.googleapis.com/depthestimation-weights/resnet-unet-espcn.zip) |
 
-Baseline Model (Monodepth2)|  ConvNext + UNet Implementation
-:-------------------------:|:-------------------------:
-![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/fig6.png)  |  ![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/WSP-2UP4_pred_convnext-unet_espcn-False.jpg)
+|Monodepth2 Output          |ConvNeXt-UNet Output     |
+|---------------------------|-------------------------|
+|![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/fig6.png)|![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/WSP-2UP4_pred_convnext-unet_espcn-False.jpg)|
+
+|ConvNeXt-UNet-ESPCN Output |ConvNeXt-UNet++-ESPCN Output |
+|---------------------------|-----------------------------|
+|![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/WSP-2UP4-convnext-unet-espcn.jpeg)|![](https://github.com/mayankpoddar/depthestimation/blob/main/assets/WSP-2UP4-convnext-unetplusplus-espcn-modified.jpeg)|
 
 |Sample Video | Monodepth2 Output |
 |-------------|-------------------|
