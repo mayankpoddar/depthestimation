@@ -80,7 +80,7 @@ use tbpath `-tbpth ./logs` for custom log path
 | Ours | convnext-tiny[4] | UNet | bilinear | &#x2717; | **0.9145** | 0.9682 | 0.9852  | **0.09386** | 0.1776 | 3.953 | **0.5298** | [Download](https://storage.googleapis.com/depthestimation-weights/convnext-unet.zip) |
 | Ours | convnext-tiny | UNet | ESPCN | &#x2717; | 0.8384 | 0.961 | 0.989  | 0.1224 | 0.1892 | **3.886** | 0.587 | [Download](https://storage.googleapis.com/depthestimation-weights/convnext-unet-espcn.zip) |
 | Ours | convnext-tiny | UNet++ | ESPCN | &#x2717; | 0.8229 | **0.9751** | **0.9902**  | 0.1234 | 0.1933 | 4.07 | 0.6039 | [Download](https://storage.googleapis.com/depthestimation-weights/convnext-unetplusplus-espcn.zip) |
-| Ours | resnet50 | UNet | bilinear | &#10003; | 0.8752 | 0.9575 | 0.9814  | 0.1125 | 0.1984 | 4.55 | 0.6957 | [Link](https://storage.googleapis.com/depthestimation-weights/resnet-unet-camnet.zip) |
+| Ours | resnet50 | UNet | bilinear | &#10003; | 0.8752 | 0.9575 | 0.9814  | 0.1125 | 0.1984 | 4.55 | 0.6957 | [Download](https://storage.googleapis.com/depthestimation-weights/resnet-unet-camnet.zip) |
 | Ours | convnext-tiny | UNet | bilinear | &#10003; | 0.7346 | 0.8911 | 0.9491  | 0.1828 | 0.2981 | 7.515 | 1.474 | [Download](https://storage.googleapis.com/depthestimation-weights/convnext-unet-camnet.zip) |
 | Ours | resnet50 | UNet | ESPCN | &#x2717; | 0.9111 | 0.9733 | 0.9878  | 0.1005 | **0.1693** | 3.978 | 0.5615 | [Download](https://storage.googleapis.com/depthestimation-weights/resnet-unet-espcn.zip) |
 
