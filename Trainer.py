@@ -1,4 +1,5 @@
 import os
+import sys
 import shutil
 import time
 import numpy as np
@@ -50,7 +51,7 @@ class Trainer:
         self.models["decoder"] = eval(depthDecoder)(self.models["encoder"].numChannels, espcn=self.config["Model"]["ESPCN"])
         if self.config["Model"]["PoseDecoder"] == "CameraNet":
             if self.config["CameraNet"]["InputType"] == "EncoderLast":
-                self.models["pose"] = CameraNet(self.models["encoder"].numChannels[-1], h=self.height//(2**(self.numScales-1)), w=self.width//(2**(self.numScales-1)))
+                self.models["pose"] = CameraNet(self.models["encoder"].numChannels[-1], h=self.height//(2**(self.numScales+1)), w=self.width//(2**(self.numScales+1)))
             elif self.config["CameraNet"]["InputType"] == "Images":
                 self.models["pose"] = CameraNet(3, h=self.height, w=self.width)
         else:
@@ -286,4 +287,4 @@ class Trainer:
         self.setTrain()
 
 if __name__ == "__main__":
-    Trainer().train()
+    Trainer(sys.argv[1]).train()

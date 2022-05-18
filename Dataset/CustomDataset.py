@@ -68,10 +68,10 @@ class CustomDataset(data.Dataset):
         inputs = {}
         colorAugmentationsFlag = self.train and random.random() > 0.5
         flipFlag = self.train and random.random() > 0.5
-        rainFlag = self.train and random.random() > 0.8
-        snowFlag = self.train and (not rainFlag) and random.random() > 0.8
-        fogFlag = self.train and random.random() > 0.8
-        sunFlareFlag = self.train and random.random() > 0.8
+        rainFlag = self.train and random.random() > 0.7
+        snowFlag = self.train and (not rainFlag) and random.random() > 0.7
+        fogFlag = self.train and random.random() > 0.7
+        sunFlareFlag = self.train and random.random() > 0.7
         line = self.filenames[index].split()
         directory = line[0]
         frameIdx = 0
